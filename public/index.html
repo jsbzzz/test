@@ -2,16 +2,97 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>동적 서버 로그인</title>
+    <title>프론트엔드 동적 화면 전환</title>
+    <style>
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            height: 100vh; 
+            background-color: #f0f2f5; 
+            margin: 0; 
+        }
+        .card { 
+            background: white; 
+            padding: 40px; 
+            border-radius: 12px; 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1); 
+            text-align: center; 
+            width: 320px; 
+        }
+        h2 { color: #333; margin-bottom: 20px; }
+        input { 
+            width: 100%; 
+            padding: 12px; 
+            margin-bottom: 15px; 
+            border: 1px solid #ddd; 
+            border-radius: 6px; 
+            font-size: 14px; 
+            box-sizing: border-box;
+        }
+        button { 
+            width: 100%;
+            background-color: #007bff; 
+            color: white; 
+            border: none; 
+            padding: 12px; 
+            border-radius: 6px; 
+            cursor: pointer; 
+            font-size: 16px; 
+            font-weight: bold;
+        }
+        button:hover { background-color: #0056b3; }
+        .hidden { display: none; }
+        .welcome-box { animation: fadeIn 0.5s ease; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    </style>
 </head>
-<body style="font-family: Arial; display: flex; justify-content: center; align-items: center; height: 100vh; background: #f0f2f5;">
-    <div style="background: white; padding: 40px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); text-align: center;">
-        <h2>Node.js 동적 서버 테스트</h2>
-        <!-- 서버의 /welcome 주소로 POST 요청을 보냄 -->
-        <form action="/welcome" method="POST">
-            <input type="text" name="username" placeholder="아이디를 입력하세요" required style="padding: 10px; width: 200px; margin-bottom: 10px;"><br>
-            <button type="submit" style="padding: 10px 20px; background: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer;">서버로 전송</button>
-        </form>
+<body>
+
+    <div class="card">
+        <!-- 1. 로그인(입력) 화면 -->
+        <div id="login-section">
+            <h2>🔐 로그인</h2>
+            <input type="text" id="userId" placeholder="아이디를 입력하세요">
+            <button onclick="handleLogin()">로그인하기</button>
+        </div>
+
+        <!-- 2. 로그인 후 환영 화면 (기본엔 숨겨져 있음) -->
+        <div id="welcome-section" class="hidden welcome-box">
+            <h2 style="color: #28a745;">✨ 환영합니다!</h2>
+            <p style="font-size: 16px; color: #555;">
+                <strong id="display-id" style="color: #000;"></strong>님, 접속을 환영합니다.
+            </p>
+            <p style="font-size: 12px; color: #888;">GitHub Actions로 자동 배포된 웹사이트입니다.</p>
+            <button style="background-color: #6c757d;" onclick="handleLogout()">로그아웃</button>
+        </div>
     </div>
+
+    <script>
+        function handleLogin() {
+            const inputVal = document.getElementById('userId').value.trim();
+
+            if (!inputVal) {
+                alert('아이디를 입력해주세요!');
+                return;
+            }
+
+            // 1. 입력받은 아이디를 환영 텍스트에 집어넣음
+            document.getElementById('display-id').innerText = inputVal;
+
+            // 2. 로그인 화면은 숨기고 환영 화면을 보여줌
+            document.getElementById('login-section').classList.add('hidden');
+            document.getElementById('welcome-section').classList.remove('hidden');
+        }
+
+        function handleLogout() {
+            // 초기화 후 로그인 화면으로 복귀
+            document.getElementById('userId').value = '';
+            document.getElementById('welcome-section').classList.add('hidden');
+            document.getElementById('login-section').classList.remove('hidden');
+        }
+    </script>
+
 </body>
 </html>
