@@ -1,0 +1,43 @@
+name: Deploy Static Site to GitHub Pages
+
+# main 브랜치에 푸시될 때 동작
+on:
+  push:
+    branches: ["main"]
+
+# 권한 설정 (GitHub Pages에 파일을 쓰기 위한 권한)
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# 중복 실행 방지
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      # 1. 저장소 코드 가져오기
+      - name: Checkout
+        uses: actions/checkout@v4
+      
+      # 2. Pages 설정
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+        
+      # 3. 배포할 파일 압축/준비 (현재 루트 폴더 기준)
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: '.' 
+          
+      # 4. GitHub Pages에 최종 배포
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
