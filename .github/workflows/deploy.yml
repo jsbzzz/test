@@ -1,0 +1,26 @@
+name: Deploy Node.js Server
+
+on:
+  push:
+    branches: [ "master" ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      # 1. 코드 체크아웃
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # 2. SSH를 통해 AWS EC2 서버에 접속하여 자동 배포 명령어 실행
+      - name: Deploy to Remote Server
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.EC2_HOST }}         # EC2 공인 IP
+          username: ${{ secrets.EC2_USERNAME }} # 보통 ubuntu
+          key: ${{ secrets.EC2_SSH_KEY }}       # EC2 접속용 프라이빗 키(.pem)
+          script: |
+            cd /home/ubuntu/my-node-app       # 서버에 프로젝트가 있는 경로
+            git pull origin main              # 최신 코드 땡겨오기
+            npm install                       # 라이브러리 업데이트
+            pm2 restart server.js             # 백그라운드 서버 프로세스 재시작 (PM2 등 활용)

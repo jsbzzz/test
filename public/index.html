@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>동적 서버 로그인</title>
+</head>
+<body style="font-family: Arial; display: flex; justify-content: center; align-items: center; height: 100vh; background: #f0f2f5;">
+    <div style="background: white; padding: 40px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); text-align: center;">
+        <h2>Node.js 동적 서버 테스트</h2>
+        <!-- 서버의 /welcome 주소로 POST 요청을 보냄 -->
+        <form action="/welcome" method="POST">
+            <input type="text" name="username" placeholder="아이디를 입력하세요" required style="padding: 10px; width: 200px; margin-bottom: 10px;"><br>
+            <button type="submit" style="padding: 10px 20px; background: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer;">서버로 전송</button>
+        </form>
+    </div>
+</body>
+</html>
